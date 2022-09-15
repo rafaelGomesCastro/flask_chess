@@ -1,0 +1,52 @@
+#div_board {
+    margin: auto;
+    width: 900px;
+    height: 900px;
+    border: 3px solid black;
+    background-image: url(/static/black_marble_border.png);
+}
+
+.board {
+    margin: 0 auto;
+    position: relative;
+    top: 50%;
+    /* transform: translateY(-50%); */
+}
+
+.white_square {
+    background-image: url(/static/white_square.png);
+    position: relative;
+    vertical-align: top;
+    width: 100px;
+    height: 100px;
+    z-index: 1;
+}
+
+.black_square {
+    background-image: url(/static/black_square.png);
+    position: relative;
+    vertical-align: top;
+    width: 100px;
+    height: 100px;
+    z-index: 1;
+}
+
+.piece {
+	position: absolute; margin: 0 auto; max-width:100%; height:auto;
+}
+
+.marker {
+	position: absolute;
+	margin: 0 auto;
+	max-width:100%;
+    height:auto;
+    opacity: 0.8;
+}
+
+.possible {
+	position: absolute;
+	margin: 0 auto;
+	max-width:100%;
+    height:auto;
+    opacity: 0.8;
+}

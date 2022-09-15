@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{url_for('static', filename='style/style.css')}}">
+	<script charset="utf-8"></script>
+	<script src="{{url_for('static', filename='js/control.js')}}"></script>
+
+</head>
+
+<body>
+    <table class="board">
+		<tr>
+			<td class="white_square">
+				<img class="piece" id="piece_7" src="/static/rook_black.png">
+				<img class="marker" id="marker_7">
+				<img class="possible" id="possible_7">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_6" src="/static/knight_black.png">
+				<img class="marker" id="marker_6">
+				<img class="possible" id="possible_6">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_5" src="/static/bishop_black.png">
+				<img class="marker" id="marker_5">
+				<img class="possible" id="possible_5">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_4" src="/static/queen_black.png">
+				<img class="marker" id="marker_4">
+				<img class="possible" id="possible_4">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_3" src="/static/king_black.png">
+				<img class="marker" id="marker_3">
+				<img class="possible" id="possible_3">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_2" src="/static/bishop_black.png">
+				<img class="marker" id="marker_2">
+				<img class="possible" id="possible_2">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_1" src="/static/knight_black.png">
+				<img class="marker" id="marker_1">
+				<img class="possible" id="possible_1">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_0" src="/static/rook_black.png">
+				<img class="marker" id="marker_0">
+				<img class="possible" id="possible_0">
+			</td>
+		</tr>
+		<tr>
+			<td class="black_square">
+				<img class="piece" id="piece_15" src="/static/pawn_black.png">
+				<img class="marker" id="marker_15">
+				<img class="possible" id="possible_15">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_14" src="/static/pawn_black.png">
+				<img class="marker" id="marker_14">
+				<img class="possible" id="possible_14">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_13" src="/static/pawn_black.png">
+				<img class="marker" id="marker_13">
+				<img class="possible" id="possible_13">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_12" src="/static/pawn_black.png">
+				<img class="marker" id="marker_12">
+				<img class="possible" id="possible_12">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_11" src="/static/pawn_black.png">
+				<img class="marker" id="marker_11">
+				<img class="possible" id="possible_11">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_10" src="/static/pawn_black.png">
+				<img class="marker" id="marker_10">
+				<img class="possible" id="possible_10">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_9" src="/static/pawn_black.png">
+				<img class="marker" id="marker_9">
+				<img class="possible" id="possible_9">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_8" src="/static/pawn_black.png">
+				<img class="marker" id="marker_8">
+				<img class="possible" id="possible_8">
+			</td>
+		</tr>
+		<tr>
+			<td class="white_square">
+				<img class="piece" id="piece_23">
+				<img class="marker" id="marker_23">
+				<img class="possible" id="possible_23">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_22">
+				<img class="marker" id="marker_22">
+				<img class="possible" id="possible_22">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_21">
+				<img class="marker" id="marker_21">
+				<img class="possible" id="possible_21">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_20">
+				<img class="marker" id="marker_20">
+				<img class="possible" id="possible_20">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_19">
+				<img class="marker" id="marker_19">
+				<img class="possible" id="possible_19">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_18">
+				<img class="marker" id="marker_18">
+				<img class="possible" id="possible_18">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_17">
+				<img class="marker" id="marker_17">
+				<img class="possible" id="possible_17">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_16">
+				<img class="marker" id="marker_16">
+				<img class="possible" id="possible_16">
+			</td>
+		</tr>
+		<tr>
+			<td class="black_square">
+				<img class="piece" id="piece_31">
+				<img class="marker" id="marker_31">
+				<img class="possible" id="possible_31">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_30">
+				<img class="marker" id="marker_30">
+				<img class="possible" id="possible_30">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_29">
+				<img class="marker" id="marker_29">
+				<img class="possible" id="possible_29">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_28">
+				<img class="marker" id="marker_28">
+				<img class="possible" id="possible_28">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_27">
+				<img class="marker" id="marker_27">
+				<img class="possible" id="possible_27">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_26">
+				<img class="marker" id="marker_26">
+				<img class="possible" id="possible_26">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_25">
+				<img class="marker" id="marker_25">
+				<img class="possible" id="possible_25">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_24">
+				<img class="marker" id="marker_24">
+				<img class="possible" id="possible_24">
+			</td>
+		</tr>
+		<tr>
+			<td class="white_square">
+				<img class="piece" id="piece_39">
+				<img class="marker" id="marker_39">
+				<img class="possible" id="possible_39">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_38">
+				<img class="marker" id="marker_38">
+				<img class="possible" id="possible_38">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_37">
+				<img class="marker" id="marker_37">
+				<img class="possible" id="possible_37">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_36">
+				<img class="marker" id="marker_36">
+				<img class="possible" id="possible_36">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_35">
+				<img class="marker" id="marker_35">
+				<img class="possible" id="possible_35">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_34">
+				<img class="marker" id="marker_34">
+				<img class="possible" id="possible_34">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_33">
+				<img class="marker" id="marker_33">
+				<img class="possible" id="possible_33">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_32">
+				<img class="marker" id="marker_32">
+				<img class="possible" id="possible_32">
+			</td>
+		</tr>
+		<tr>
+			<td class="black_square">
+				<img class="piece" id="piece_47">
+				<img class="marker" id="marker_47">
+				<img class="possible" id="possible_47">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_46">
+				<img class="marker" id="marker_46">
+				<img class="possible" id="possible_46">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_45">
+				<img class="marker" id="marker_45">
+				<img class="possible" id="possible_45">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_44">
+				<img class="marker" id="marker_44">
+				<img class="possible" id="possible_44">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_43">
+				<img class="marker" id="marker_43">
+				<img class="possible" id="possible_43">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_42">
+				<img class="marker" id="marker_42">
+				<img class="possible" id="possible_42">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_41">
+				<img class="marker" id="marker_41">
+				<img class="possible" id="possible_41">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_40">
+				<img class="marker" id="marker_40">
+				<img class="possible" id="possible_40">
+			</td>
+		</tr>
+		<tr>
+			<td class="white_square">
+				<img class="piece" id="piece_55" src="/static/pawn_white.png">
+				<img class="marker" id="marker_55">
+				<img class="possible" id="possible_55">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_54" src="/static/pawn_white.png">
+				<img class="marker" id="marker_54">
+				<img class="possible" id="possible_54">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_53" src="/static/pawn_white.png">
+				<img class="marker" id="marker_53">
+				<img class="possible" id="possible_53">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_52" src="/static/pawn_white.png">
+				<img class="marker" id="marker_52">
+				<img class="possible" id="possible_52">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_51" src="/static/pawn_white.png">
+				<img class="marker" id="marker_51">
+				<img class="possible" id="possible_51">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_50" src="/static/pawn_white.png">
+				<img class="marker" id="marker_50">
+				<img class="possible" id="possible_50">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_49" src="/static/pawn_white.png">
+				<img class="marker" id="marker_49">
+				<img class="possible" id="possible_49">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_48" src="/static/pawn_white.png">
+				<img class="marker" id="marker_48">
+				<img class="possible" id="possible_48">
+			</td>
+		</tr>
+		<tr>
+			<td class="black_square">
+				<img class="piece" id="piece_63" src="/static/rook_white.png">
+				<img class="marker" id="marker_63">
+				<img class="possible" id="possible_63">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_62" src="/static/knight_white.png">
+				<img class="marker" id="marker_62">
+				<img class="possible" id="possible_62">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_61" src="/static/bishop_white.png">
+				<img class="marker" id="marker_61">
+				<img class="possible" id="possible_61">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_60" src="/static/queen_white.png">
+				<img class="marker" id="marker_60">
+				<img class="possible" id="possible_60">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_59" src="/static/king_white.png">
+				<img class="marker" id="marker_59">
+				<img class="possible" id="possible_59">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_58" src="/static/bishop_white.png">
+				<img class="marker" id="marker_58">
+				<img class="possible" id="possible_58">
+			</td>
+			<td class="black_square">
+				<img class="piece" id="piece_57" src="/static/knight_white.png">
+				<img class="marker" id="marker_57">
+				<img class="possible" id="possible_57">
+			</td>
+			<td class="white_square">
+				<img class="piece" id="piece_56" src="/static/rook_white.png">
+				<img class="marker" id="marker_56">
+				<img class="possible" id="possible_56">
+			</td>
+		</tr>
+	 </table>
+</body>
+</html>
