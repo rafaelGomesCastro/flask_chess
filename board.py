@@ -91,6 +91,7 @@ class Board:
         elif (piece.type in KING):
             print("")
         else:
+            print(possible_moves)
             for i in range(len(possible_moves)):
                 n = possible_moves[i]
                 if ((piece.color == WHITE and self.positions[n] <  1) or
@@ -124,15 +125,12 @@ def move():
 
     move = '{"possible_moves": "' + str_possible + '"}'
 
-    print(move)
-
     return move
 
 @app.route('/complete_move', methods=["POST"])
 def complete_move():
     sel_idx   = 63 - request.get_json()['sel_idx']
     sel_piece = 63 - request.get_json()['sel_piece']
-    print(">>>", sel_idx, sel_piece)
 
     p = board.white_piece
     p_opposite = board.black_piece
@@ -140,18 +138,12 @@ def complete_move():
         p = board.black_piece
         p_opposite = board.white_piece
     while (p and p.idx != sel_piece):
-        print(p.idx, sel_piece)
         p = p.next
 
     # Move piece
     board.positions[p.idx] = EMPTY
     p.idx = sel_idx
     board.positions[p.idx] = p.type
-
-    # for i in range(8):
-    #     for j in range(8):
-    #         print(board.positions[i*8+j],end=" ")
-    #     print()
 
     if (p.type in PAWN or p.type in KING or p.type in ROOK):
         p.not_moved = False

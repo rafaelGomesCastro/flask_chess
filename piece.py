@@ -74,28 +74,28 @@ class Bishop(Piece):
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x < 8 and y < 8):
+        while ((x+1) < 8 and (y+1) < 8):
             result.append((y+1)*8 + (x+1))
             x += 1
             y += 1
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x < 8 and y > -1):
-            result.append((y+1)*8 + (x-1))
+        while ((x+1) < 8 and (y-1) > -1):
+            result.append((y-1)*8 + (x+1))
             x += 1
             y -= 1
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x > -1 and y < 8):
+        while ((x-1) > -1 and (y+1) < 8):
             result.append((y+1)*8 + (x-1))
             x -= 1
             y += 1
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x > -1 and y > -1):
+        while ((x-1) > -1 and (y-1) > -1):
             result.append((y-1)*8 + (x-1))
             x -= 1
             y -= 1
@@ -137,28 +137,28 @@ class Queen(Piece):
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x < 8 and y < 8):
+        while ((x+1) < 8 and (y+1) < 8):
             result.append((y+1)*8 + (x+1))
             x += 1
             y += 1
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x < 8 and y > -1):
-            result.append((y+1)*8 + (x-1))
+        while ((x+1) < 8 and (y-1) > -1):
+            result.append((y-1)*8 + (x+1))
             x += 1
             y -= 1
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x > -1 and y < 8):
+        while ((x-1) > -1 and (y+1) < 8):
             result.append((y+1)*8 + (x-1))
             x -= 1
             y += 1
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x > -1 and y > -1):
+        while ((x-1) > -1 and (y-1) > -1):
             result.append((y-1)*8 + (x-1))
             x -= 1
             y -= 1
