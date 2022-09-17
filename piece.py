@@ -222,7 +222,7 @@ class Pawn(Piece):
             move.append((y-1)*8 + x)
             if (self.not_moved): move.append((y-2)*8 + x)
             if ((x+1) <  8): atk.append((y-1)*8 + (x+1))
-            if ((x-1) > -1): atk.append((y-1)*8 + (x-1))            
+            if ((x-1) > -1): atk.append((y-1)*8 + (x-1))
 
         result.append(move)
         result.append(atk)

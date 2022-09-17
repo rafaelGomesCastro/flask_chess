@@ -86,12 +86,14 @@ function move_piece() {
 			'sel_piece': sel_piece
 		})
 	})
-	.then(function(response){
-		if (response.ok) {
-			console.log("Move completed!");
-		}
-		else {
-			throw Error('Something went wrong ):');
+	.then(response => response.json())
+	.then(function(json) {
+		if (json.piece) {
+			console.log(json.piece);
+			var id_rook = "piece_" + json.piece.split(',')[0];
+			var id_dest = "piece_" + json.piece.split(',')[1];
+			document.getElementById(id_dest).src = document.getElementById(id_rook).src;
+			document.getElementById(id_rook).src = "";
 		}
 	})
 	.catch(function(error) {
@@ -149,8 +151,9 @@ function main() {
 				sel_piece = sel_idx;
 				calc_movement();
 			}
-			else if (has_possible) {
+			else if (has_possible && sel_piece) {
 				move_piece();
+				sel_piece = null;
 			}
 			else {
 				for (var i = 0; i < possible_moves.length; ++i) {
