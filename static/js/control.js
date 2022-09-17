@@ -25,13 +25,11 @@ function init() {
 }
 
 function calc_movement() {
-	for (var i = 0; i < possible_moves.length; ++i) {
+	for (var i = 0; i < possible_moves.length && possible_moves[i] != ''; ++i) {
 		var n = possible_moves[i];
 		var id = "possible_" + (n).toString();
 		document.getElementById(id).src = "";
 	}
-
-	console.log(sel_idx);
 
 	fetch('/move', {
 		headers: {
@@ -47,7 +45,7 @@ function calc_movement() {
 			response.json().then(function(response) {
 				var json = JSON.parse(JSON.stringify(response));
 				possible_moves = json['possible_moves'].split(',');
-				for (var i = 0; i < possible_moves.length; ++i) {
+				for (var i = 0; i < possible_moves.length && possible_moves[i] != ''; ++i) {
 					var n = possible_moves[i];
 					var id = "possible_" + (n).toString();
 					document.getElementById(id).src = possible_img;
@@ -74,6 +72,7 @@ function move_piece() {
 		var id = "possible_" + (n).toString();
 		document.getElementById(id).src = "";
 	}
+	possible_moves = [];
 
 	right_player = (right_player + 1) % 2;
 
