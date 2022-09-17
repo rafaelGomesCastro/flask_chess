@@ -78,23 +78,137 @@ class Board:
         possible_moves = piece.possible_moves()
 
         if (piece.type in PAWN):
-            x = piece.idx % 8
-            for i in range(len(possible_moves)):
-                n = possible_moves[i]
-                x_n = n % 8         
-                if (x == x_n and self.positions[n] == EMPTY):
+            for i in range(len(possible_moves[0])):
+                n = possible_moves[0][i]
+                if (self.positions[n] == EMPTY):
                     result.append(n)
-                elif ((piece.color == WHITE and self.positions[n] < EMPTY) or
-                      (piece.color == BLACK and self.positions[n] > EMPTY)):
+            for i in range(len(possible_moves[1])):
+                n = possible_moves[1][i]
+                if ((piece.color == WHITE and self.positions[n] < EMPTY) or
+                    (piece.color == BLACK and self.positions[n] > EMPTY)):
                     result.append(n)
-
         elif (piece.type in KING):
-            print("")
-        else:
+            p_opposite = self.black_piece
+            if (piece.color == BLACK):
+                p_opposite = self.white_piece
+
             for i in range(len(possible_moves)):
                 n = possible_moves[i]
                 if ((piece.color == WHITE and self.positions[n] <  1) or
                     (piece.color == BLACK and self.positions[n] > -1)):
+                    result.append(n)
+        else:
+            blocked_squares = []
+
+            x = piece.idx % 8 + 1
+            y = int(piece.idx / 8)
+            while (x < 8 and self.positions[(y*8)+x] == EMPTY): x += 1
+            if (x < 8 and 
+                ((piece.color == WHITE and self.positions[(y*8)+x] < EMPTY) or
+                 (piece.color == BLACK and self.positions[(y*8)+x] > EMPTY))):
+                x += 1
+            while (x < 8):
+                blocked_squares.append((y*8)+x)
+                x += 1
+
+            x = piece.idx % 8 - 1
+            y = int(piece.idx / 8)
+            while (x > -1 and self.positions[(y*8)+x] == EMPTY): x -= 1
+            if (x > -1 and 
+                ((piece.color == WHITE and self.positions[(y*8)+x] < EMPTY) or
+                 (piece.color == BLACK and self.positions[(y*8)+x] > EMPTY))):
+                x -= 1
+            while (x > -1):
+                blocked_squares.append((y*8)+x)
+                x -= 1
+
+            x = piece.idx % 8
+            y = int(piece.idx / 8) + 1
+            while (y < 8 and self.positions[(y*8)+x] == EMPTY): y += 1
+            if (y < 8 and 
+                ((piece.color == WHITE and self.positions[(y*8)+x] < EMPTY) or
+                 (piece.color == BLACK and self.positions[(y*8)+x] > EMPTY))):
+                y += 1
+            while (y < 8):
+                blocked_squares.append((y*8)+x)
+                y += 1
+
+            x = piece.idx % 8
+            y = int(piece.idx / 8) - 1
+            while (y > -1 and self.positions[(y*8)+x] == EMPTY): y -= 1
+            if (y > -1 and 
+                ((piece.color == WHITE and self.positions[(y*8)+x] < EMPTY) or
+                 (piece.color == BLACK and self.positions[(y*8)+x] > EMPTY))):
+                y -= 1
+            while (y > -1):
+                blocked_squares.append((y*8)+x)
+                y -= 1
+
+            x = piece.idx % 8  + 1
+            y = int(piece.idx / 8) + 1
+            while (x < 8 and y < 8 and self.positions[(y*8)+x] == EMPTY):
+                x += 1
+                y += 1
+            if (x < 8 and y < 8 and 
+                ((piece.color == WHITE and self.positions[(y*8)+x] < EMPTY) or
+                 (piece.color == BLACK and self.positions[(y*8)+x] > EMPTY))):
+                x += 1
+                y += 1
+            while (x < 8 and y < 8):
+                blocked_squares.append((y*8)+x)
+                x += 1
+                y += 1
+
+            x = piece.idx % 8  - 1
+            y = int(piece.idx / 8) + 1
+            while (x > -1 and y < 8 and self.positions[(y*8)+x] == EMPTY):
+                x -= 1
+                y += 1
+            if (x > -1 and y < 8 and 
+                ((piece.color == WHITE and self.positions[(y*8)+x] < EMPTY) or
+                 (piece.color == BLACK and self.positions[(y*8)+x] > EMPTY))):
+                x -= 1
+                y += 1
+            while (x > -1 and y < 8):
+                blocked_squares.append((y*8)+x)
+                x -= 1
+                y += 1
+
+            x = piece.idx % 8  + 1
+            y = int(piece.idx / 8) - 1
+            while (x < 8 and y > -1 and self.positions[(y*8)+x] == EMPTY):
+                x += 1
+                y -= 1
+            if (x < 8 and y > -1 and 
+                ((piece.color == WHITE and self.positions[(y*8)+x] < EMPTY) or
+                 (piece.color == BLACK and self.positions[(y*8)+x] > EMPTY))):
+                x += 1
+                y -= 1
+            while (x < 8 and y > -1):
+                blocked_squares.append((y*8)+x)
+                x += 1
+                y -= 1
+
+            x = piece.idx % 8  - 1
+            y = int(piece.idx / 8) - 1
+            while (x > -1 and y > -1 and self.positions[(y*8)+x] == EMPTY):
+                x -= 1
+                y -= 1
+            if (x > -1 and y > -1 and 
+                ((piece.color == WHITE and self.positions[(y*8)+x] < EMPTY) or
+                 (piece.color == BLACK and self.positions[(y*8)+x] > EMPTY))):
+                x -= 1
+                y -= 1
+            while (x > -1 and y > -1):
+                blocked_squares.append((y*8)+x)
+                x -= 1
+                y -= 1
+
+            for i in range(len(possible_moves)):
+                n = possible_moves[i]
+                if (n not in blocked_squares and
+                    ((piece.color == WHITE and self.positions[n] <  1) or
+                     (piece.color == BLACK and self.positions[n] > -1))):
                     result.append(n)
 
         return result            
@@ -124,15 +238,12 @@ def move():
 
     move = '{"possible_moves": "' + str_possible + '"}'
 
-    print(move)
-
     return move
 
 @app.route('/complete_move', methods=["POST"])
 def complete_move():
     sel_idx   = 63 - request.get_json()['sel_idx']
     sel_piece = 63 - request.get_json()['sel_piece']
-    print(">>>", sel_idx, sel_piece)
 
     p = board.white_piece
     p_opposite = board.black_piece
@@ -140,18 +251,12 @@ def complete_move():
         p = board.black_piece
         p_opposite = board.white_piece
     while (p and p.idx != sel_piece):
-        print(p.idx, sel_piece)
         p = p.next
 
     # Move piece
     board.positions[p.idx] = EMPTY
     p.idx = sel_idx
     board.positions[p.idx] = p.type
-
-    # for i in range(8):
-    #     for j in range(8):
-    #         print(board.positions[i*8+j],end=" ")
-    #     print()
 
     if (p.type in PAWN or p.type in KING or p.type in ROOK):
         p.not_moved = False

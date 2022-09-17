@@ -74,28 +74,28 @@ class Bishop(Piece):
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x < 8 and y < 8):
+        while ((x+1) < 8 and (y+1) < 8):
             result.append((y+1)*8 + (x+1))
             x += 1
             y += 1
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x < 8 and y > -1):
-            result.append((y+1)*8 + (x-1))
+        while ((x+1) < 8 and (y-1) > -1):
+            result.append((y-1)*8 + (x+1))
             x += 1
             y -= 1
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x > -1 and y < 8):
+        while ((x-1) > -1 and (y+1) < 8):
             result.append((y+1)*8 + (x-1))
             x -= 1
             y += 1
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x > -1 and y > -1):
+        while ((x-1) > -1 and (y-1) > -1):
             result.append((y-1)*8 + (x-1))
             x -= 1
             y -= 1
@@ -137,28 +137,28 @@ class Queen(Piece):
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x < 8 and y < 8):
+        while ((x+1) < 8 and (y+1) < 8):
             result.append((y+1)*8 + (x+1))
             x += 1
             y += 1
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x < 8 and y > -1):
-            result.append((y+1)*8 + (x-1))
+        while ((x+1) < 8 and (y-1) > -1):
+            result.append((y-1)*8 + (x+1))
             x += 1
             y -= 1
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x > -1 and y < 8):
+        while ((x-1) > -1 and (y+1) < 8):
             result.append((y+1)*8 + (x-1))
             x -= 1
             y += 1
 
         x = self.idx % 8
         y = int(self.idx / 8)
-        while (x > -1 and y > -1):
+        while ((x-1) > -1 and (y-1) > -1):
             result.append((y-1)*8 + (x-1))
             x -= 1
             y -= 1
@@ -208,18 +208,23 @@ class Pawn(Piece):
     
     def possible_moves(self):
         result = []
+        move   = []
+        atk    = []
 
         x = self.idx % 8
         y = int(self.idx / 8)
         if (self.type == W_PAWN):
-            result.append((y+1)*8 + x)
-            if ((x+1) <  8): result.append((y+1)*8 + (x+1))
-            if ((x-1) > -1): result.append((y+1)*8 + (x-1))
-            if (self.not_moved): result.append((y+2)*8 + x)
+            move.append((y+1)*8 + x)
+            if (self.not_moved): move.append((y+2)*8 + x)
+            if ((x+1) <  8): atk.append((y+1)*8 + (x+1))
+            if ((x-1) > -1): atk.append((y+1)*8 + (x-1))
         else:
-            result.append((y-1)*8 + x)
-            if ((x+1) <  8): result.append((y-1)*8 + (x+1))
-            if ((x-1) > -1): result.append((y-1)*8 + (x-1))
-            if (self.not_moved): result.append((y-2)*8 + x)
+            move.append((y-1)*8 + x)
+            if (self.not_moved): move.append((y-2)*8 + x)
+            if ((x+1) <  8): atk.append((y-1)*8 + (x+1))
+            if ((x-1) > -1): atk.append((y-1)*8 + (x-1))            
+
+        result.append(move)
+        result.append(atk)
 
         return result

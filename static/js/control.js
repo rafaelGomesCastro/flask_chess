@@ -5,10 +5,15 @@ const LEFT  = "ArrowLeft";
 const RIGHT = "ArrowRight";
 const OK    = "Enter";
 
+// Colors
+const WHITE = 0;
+const BLACK = 1;
+
 var sel_idx      = 35;
 var sel_piece    = null;
 var sel_img      = '/static/marker.png';
 var possible_img = '/static/possible_square.png';
+var right_player = WHITE;
 
 var possible_moves = [];
 
@@ -20,7 +25,7 @@ function init() {
 }
 
 function calc_movement() {
-	for (var i = 0; i < possible_moves.length; ++i) {
+	for (var i = 0; i < possible_moves.length && possible_moves[i] != ''; ++i) {
 		var n = possible_moves[i];
 		var id = "possible_" + (n).toString();
 		document.getElementById(id).src = "";
@@ -40,8 +45,7 @@ function calc_movement() {
 			response.json().then(function(response) {
 				var json = JSON.parse(JSON.stringify(response));
 				possible_moves = json['possible_moves'].split(',');
-				console.log(possible_moves);
-				for (var i = 0; i < possible_moves.length; ++i) {
+				for (var i = 0; i < possible_moves.length && possible_moves[i] != ''; ++i) {
 					var n = possible_moves[i];
 					var id = "possible_" + (n).toString();
 					document.getElementById(id).src = possible_img;
@@ -68,6 +72,9 @@ function move_piece() {
 		var id = "possible_" + (n).toString();
 		document.getElementById(id).src = "";
 	}
+	possible_moves = [];
+
+	right_player = (right_player + 1) % 2;
 
 	fetch('/complete_move', {
 		headers: {
@@ -99,28 +106,28 @@ function main() {
 		// var id      = "marker_" + (idx).toString();
 		// document.getElementById(id).src = '';
 		
-		if      (keyCode == UP) {
+		if      (keyCode == UP && Math.floor(sel_idx / 8) - 1 > -1) {
 			var id = "marker_" + (sel_idx).toString();
 			document.getElementById(id).src = '';
 			sel_idx -= 8
 			var id = "marker_" + (sel_idx).toString();
 			document.getElementById(id).src = sel_img;
 		}
-		else if (keyCode == DOWN) {
+		else if (keyCode == DOWN && Math.floor(sel_idx / 8) + 1 < 8) {
 			var id = "marker_" + (sel_idx).toString();
 			document.getElementById(id).src = '';
 			sel_idx += 8
 			var id = "marker_" + (sel_idx).toString();
 			document.getElementById(id).src = sel_img;
 		}            
-		else if (keyCode == LEFT) {
+		else if (keyCode == LEFT && (sel_idx % 8) + 1 < 8) {
 			var id = "marker_" + (sel_idx).toString();
 			document.getElementById(id).src = '';
 			sel_idx += 1
 			var id = "marker_" + (sel_idx).toString();
 			document.getElementById(id).src = sel_img;
 		}            
-		else if (keyCode == RIGHT) {
+		else if (keyCode == RIGHT && (sel_idx % 8) - 1 > -1) {
 			var id = "marker_" + (sel_idx).toString();
 			document.getElementById(id).src = '';
 			sel_idx -= 1
@@ -131,10 +138,14 @@ function main() {
 			var id = "piece_" + (sel_idx).toString();
 			var has_piece = document.getElementById(id).src != "";
 
+			var player = -1;
+			if      (has_piece && document.getElementById(id).src.includes("white")) player = WHITE;
+			else if (has_piece && document.getElementById(id).src.includes("black")) player = BLACK;
+
 			id = "possible_" + (sel_idx).toString();
 			var has_possible = document.getElementById(id).src != "";
 
-			if (has_piece) {
+			if (has_piece && player == right_player) {
 				sel_piece = sel_idx;
 				calc_movement();
 			}

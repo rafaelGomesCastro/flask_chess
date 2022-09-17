@@ -8,4 +8,4 @@ class Player:
 
 
     def change_color(self):
-        self.color = (self.color) + 1 % 2
+        self.color = (self.color + 1) % 2
