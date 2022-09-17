@@ -89,7 +89,6 @@ function move_piece() {
 	.then(response => response.json())
 	.then(function(json) {
 		if (json.piece) {
-			console.log(json.piece);
 			var id_rook = "piece_" + json.piece.split(',')[0];
 			var id_dest = "piece_" + json.piece.split(',')[1];
 			document.getElementById(id_dest).src = document.getElementById(id_rook).src;
@@ -104,9 +103,6 @@ function move_piece() {
 function main() {
 	document.addEventListener("keydown", function(inEvent) {
 		var keyCode = inEvent.key || inEvent.keyCode;
-		// var idx     = board.select_idx;
-		// var id      = "marker_" + (idx).toString();
-		// document.getElementById(id).src = '';
 		
 		if      (keyCode == UP && Math.floor(sel_idx / 8) - 1 > -1) {
 			var id = "marker_" + (sel_idx).toString();

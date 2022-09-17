@@ -269,7 +269,7 @@ class Board:
 
         return result            
 
-board = Board()
+board  = Board()
 player = Player()
 
 # Routes
@@ -357,11 +357,9 @@ def complete_move():
     content['status'] = 'ok'
 
     response = make_response(
-                jsonify(
-                    content
-                ),
-                200,
-            )
+        jsonify(content),
+        200,
+    )
     response.headers["Content-Type"] = "application/json"
 
     return response
