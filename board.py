@@ -1,6 +1,28 @@
 from flask import Flask, request, render_template, make_response, jsonify
+from stockfish import Stockfish
 from piece import *
 from player import *
+
+x_squares = {
+    '0': 'a',
+    '1': 'b',
+    '2': 'c',
+    '3': 'd',
+    '4': 'e',
+    '5': 'f',
+    '6': 'g',
+    '7': 'h',
+
+    'a': 0,
+    'b': 1,
+    'c': 2,
+    'd': 3,
+    'e': 4,
+    'f': 5,
+    'g': 6,
+    'h': 7
+}
+
 
 class Board:
     def __init__(self):
@@ -22,6 +44,8 @@ class Board:
         self.white_small_castle = False
         self.black_big_castle   = False
         self.black_small_castle = False
+
+        self.idx_en_passant = None
 
         self.create_table()
 
@@ -118,7 +142,21 @@ class Board:
                 self.white_small_castle = True
             else:
                 self.black_small_castle = True
-                
+
+    def check_en_passant(self, piece):
+        if (not self.idx_en_passant): return None
+
+        x = piece.idx % 8
+        y = int(piece.idx / 8)
+        x_en_passant = self.idx_en_passant % 8
+        y_en_passant = int(self.idx_en_passant / 8)
+
+        if ((y == y_en_passant and x == x_en_passant + 1) or 
+            (y == y_en_passant and x == x_en_passant - 1)):
+            if (piece.color == WHITE): return self.idx_en_passant + 8
+            else: return self.idx_en_passant - 8
+
+        return None
 
     def possible_moves(self, piece):
         result = []
@@ -136,6 +174,9 @@ class Board:
                 if ((piece.color == WHITE and self.positions[n] < EMPTY) or
                     (piece.color == BLACK and self.positions[n] > EMPTY)):
                     result.append(n)
+
+            en_passant = self.check_en_passant(piece)
+            if (en_passant): result.append(en_passant)
         elif (piece.type in KING):
             # p_opposite = self.black_piece
             # if (piece.color == BLACK):
@@ -271,6 +312,7 @@ class Board:
 
 board  = Board()
 player = Player()
+stockfish = Stockfish()
 
 # Routes
 app = Flask(__name__)
@@ -278,12 +320,43 @@ app = Flask(__name__)
 def board_create():
     return render_template('index.html')
 
+@app.route('/stockfish_move', methods=["POST"])
+def stockfish_move():
+    move = stockfish.get_best_move()
+    stockfish.make_moves_from_current_position([move])
+    print(move)
+
+    x_sel_piece   = x_squares[move[0]]
+    y_sel_piece   = int(move[1]) - 1
+    x_sel_idx     = x_squares[move[2]]
+    y_sel_idx     = int(move[3]) - 1
+    idx_sel_piece = y_sel_piece * 8 + x_sel_piece
+    idx_sel_idx   = y_sel_idx   * 8 + x_sel_idx
+
+    board.positions[idx_sel_idx]   = board.positions[idx_sel_piece]
+    board.positions[idx_sel_piece] = EMPTY
+
+    p = board.black_piece
+    while (p.idx != idx_sel_piece): p = p.next
+    p.idx = idx_sel_idx
+
+    content = {}
+    content['piece'] = str(63 - idx_sel_piece) + ',' + str(63 - idx_sel_idx)
+    content['status'] = 'ok'
+
+    response = make_response(
+        jsonify(content),
+        200,
+    )
+    response.headers["Content-Type"] = "application/json"
+
+    return response
+
 @app.route('/move', methods=["POST"])
 def move():
     sel_idx = 63 - request.get_json()['sel_idx']
 
     p = board.white_piece
-    if (player.color == BLACK): p = board.black_piece
     while (p and (not p.in_game or p.idx != sel_idx)): p = p.next
     
     possible = board.possible_moves(p)
@@ -303,13 +376,16 @@ def complete_move():
     sel_idx   = 63 - request.get_json()['sel_idx']
     sel_piece = 63 - request.get_json()['sel_piece']
 
+    x_start  = str(sel_piece % 8)
+    y_start  = str(int(sel_piece / 8) + 1)
+    x_end    = str(sel_idx % 8)
+    y_end    = str(int(sel_idx / 8) + 1)
+    fen_move = x_squares[x_start] + y_start + x_squares[x_end] + y_end
+    stockfish.make_moves_from_current_position([fen_move])
+
     p = board.white_piece
     p_opposite = board.black_piece
-    if (player.color == BLACK):
-        p = board.black_piece
-        p_opposite = board.white_piece
-    while (p and (not p.in_game or p.idx != sel_piece)):
-        p = p.next
+    while (p and (not p.in_game or p.idx != sel_idx)): p = p.next
 
     # Move piece
     big_castle   = False
@@ -344,14 +420,29 @@ def complete_move():
         value += str(63-rook.idx)
         content['piece'] = value
 
+    # Check if en passant occurs
+    idx_en_passant = None
+    if (p.type in PAWN and board.positions[sel_idx] == EMPTY and
+        (player.color == WHITE and (sel_idx == p.idx + 9 or sel_idx == p.idx + 7)) or
+        (player.color == BLACK and (sel_idx == p.idx - 9 or sel_idx == p.idx - 7))):
+        idx_en_passant = sel_idx - 8 if (player.color == WHITE) else sel_idx + 8
+
+    # Check if movement allows en passant
+    if (p.type in PAWN and 
+        (p.color == WHITE and sel_idx == p.idx + 16) or
+        (p.color == BLACK and sel_idx == p.idx - 16)):
+        board.idx_en_passant = sel_idx
+    else:
+        board.idx_en_passant = None
+
     if (p.type in PAWN or p.type in KING or p.type in ROOK):
         p.not_moved = False
 
     # In case of capture, remove captured piece from the board
     while (p_opposite and p_opposite.idx != sel_idx):
         p_opposite = p_opposite.next
-    if (p_opposite): p_opposite.captured()
-
+    if (p_opposite): p_opposite.captured()    
+    
     player.change_color()
 
     content['status'] = 'ok'

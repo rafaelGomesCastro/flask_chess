@@ -4,6 +4,7 @@ const DOWN  = "ArrowDown";
 const LEFT  = "ArrowLeft";
 const RIGHT = "ArrowRight";
 const OK    = "Enter";
+const ST    = " ";
 
 // Colors
 const WHITE = 0;
@@ -54,6 +55,27 @@ function calc_movement() {
 		}
 		else {
 			throw Error('Something went wrong ):');
+		}
+	})
+	.catch(function(error) {
+		console.log(error);
+	});
+}
+
+function stockfish_move() {
+	fetch('/stockfish_move', {
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		method: 'POST'
+	})
+	.then(response => response.json())
+	.then(function(json) {
+		if (json.piece) {
+			var id_orig = "piece_" + json.piece.split(',')[0];
+			var id_dest = "piece_" + json.piece.split(',')[1];
+			document.getElementById(id_dest).src = document.getElementById(id_orig).src;
+			document.getElementById(id_orig).src = "";
 		}
 	})
 	.catch(function(error) {
@@ -143,7 +165,7 @@ function main() {
 			id = "possible_" + (sel_idx).toString();
 			var has_possible = document.getElementById(id).src != "";
 
-			if (has_piece && player == right_player) {
+			if (has_piece) {
 				sel_piece = sel_idx;
 				calc_movement();
 			}
@@ -159,11 +181,9 @@ function main() {
 				}
 			}
 		}
-		
-		// idx = board.select_idx;
-		// id = "marker_" + (idx).toString();
-		// document.getElementById(id).src = board.select_url_img;
-
+		else if (keyCode == ST) {
+			stockfish_move();
+		}
 	});
 }
 
