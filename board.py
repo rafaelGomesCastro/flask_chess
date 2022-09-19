@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, make_response, jsonify
 from stockfish import Stockfish
+import time
 from piece import *
 from player import *
 
@@ -322,9 +323,9 @@ def board_create():
 
 @app.route('/stockfish_move', methods=["POST"])
 def stockfish_move():
-    move = stockfish.get_best_move()
+    time.sleep(5)
+    move = stockfish.get_best_move_time(5000)
     stockfish.make_moves_from_current_position([move])
-    print(move)
 
     x_sel_piece   = x_squares[move[0]]
     y_sel_piece   = int(move[1]) - 1
@@ -340,9 +341,18 @@ def stockfish_move():
     while (p.idx != idx_sel_piece): p = p.next
     p.idx = idx_sel_idx
 
+    p = board.white_piece
+    while (p and p.idx != idx_sel_idx): p = p.next
+    if (p): p.captured()
+
     content = {}
     content['piece'] = str(63 - idx_sel_piece) + ',' + str(63 - idx_sel_idx)
-    content['status'] = 'ok'
+    if (move == 'e8g8'):
+        content['castle'] = '0,2'
+    elif (move == 'e8c8'):
+        content['castle'] = '7,4'
+
+    print(content)
 
     response = make_response(
         jsonify(content),
@@ -352,12 +362,12 @@ def stockfish_move():
 
     return response
 
-@app.route('/move', methods=["POST"])
-def move():
+@app.route('/calc_move', methods=["POST"])
+def calc_move():
     sel_idx = 63 - request.get_json()['sel_idx']
 
     p = board.white_piece
-    while (p and (not p.in_game or p.idx != sel_idx)): p = p.next
+    while (not p.in_game or p.idx != sel_idx): p = p.next
     
     possible = board.possible_moves(p)
     str_possible = ""
@@ -385,7 +395,8 @@ def complete_move():
 
     p = board.white_piece
     p_opposite = board.black_piece
-    while (p and (not p.in_game or p.idx != sel_idx)): p = p.next
+    while (not p.in_game or p.idx != sel_piece):
+        p = p.next
 
     # Move piece
     big_castle   = False
@@ -445,11 +456,8 @@ def complete_move():
     
     player.change_color()
 
-    content['status'] = 'ok'
-
     response = make_response(
-        jsonify(content),
-        200,
+        200
     )
     response.headers["Content-Type"] = "application/json"
 

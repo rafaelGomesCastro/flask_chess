@@ -25,14 +25,14 @@ function init() {
 	document.getElementById(id).src = sel_img;
 }
 
-function calc_movement() {
+function calc_move() {
 	for (var i = 0; i < possible_moves.length && possible_moves[i] != ''; ++i) {
 		var n = possible_moves[i];
 		var id = "possible_" + (n).toString();
 		document.getElementById(id).src = "";
 	}
 
-	fetch('/move', {
+	fetch('/calc_move', {
 		headers: {
 			'Content-Type': 'application/json'
 		},
@@ -74,6 +74,12 @@ function stockfish_move() {
 		if (json.piece) {
 			var id_orig = "piece_" + json.piece.split(',')[0];
 			var id_dest = "piece_" + json.piece.split(',')[1];
+			document.getElementById(id_dest).src = document.getElementById(id_orig).src;
+			document.getElementById(id_orig).src = "";
+		}
+		if (json.castle) {
+			var id_orig = "piece_" + json.castle.split(',')[0];
+			var id_dest = "piece_" + json.castle.split(',')[1];
 			document.getElementById(id_dest).src = document.getElementById(id_orig).src;
 			document.getElementById(id_orig).src = "";
 		}
@@ -156,22 +162,19 @@ function main() {
 		}            
 		else if (keyCode == OK) {
 			var id = "piece_" + (sel_idx).toString();
-			var has_piece = document.getElementById(id).src != "";
-
-			var player = -1;
-			if      (has_piece && document.getElementById(id).src.includes("white")) player = WHITE;
-			else if (has_piece && document.getElementById(id).src.includes("black")) player = BLACK;
+			var has_piece = document.getElementById(id).src.includes('white');
 
 			id = "possible_" + (sel_idx).toString();
-			var has_possible = document.getElementById(id).src != "";
+			var has_possible = document.getElementById(id).src.includes('.png');
 
 			if (has_piece) {
 				sel_piece = sel_idx;
-				calc_movement();
+				calc_move();
 			}
 			else if (has_possible && sel_piece) {
 				move_piece();
 				sel_piece = null;
+				stockfish_move();
 			}
 			else {
 				for (var i = 0; i < possible_moves.length; ++i) {
